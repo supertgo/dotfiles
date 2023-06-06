@@ -26,7 +26,7 @@ if [ -f "/usr/share/bash-completion/completions/git" ]; then
     local cache_file=~/.git_branches_cache
 
     # Refresh cache if it doesn't exist or is older than 1 day
-    if [ ! -f "$cache_file" ] || [ $(find "$cache_file" -mtime +1 -print) ]; then
+    if [ ! -f "$cache_file" ] || [ $(find "$cache_file" -mnin +0.5 -print) ]; then
       git ls-remote --heads origin | awk '{print $2}' | sed 's#refs/heads/##' > "$cache_file"
     fi
 
