@@ -12,6 +12,8 @@ alias gco='git checkout'
 alias gpl='git pull origin'
 alias gd='git diff'
 alias gst='git status'
+alias gf='git fetch origin'
+alias gr='git restore'
 
 # setup autocompletion
 if [ -f "/usr/share/bash-completion/completions/git" ]; then
@@ -30,4 +32,14 @@ if [ -f "/usr/share/bash-completion/completions/git" ]; then
 else
   echo "Error loading git completions"
 fi
+
+# EMCASH ALIAS
+alias gowallet='cd ~ && cd programas/em-cash/wallet.em.cash/'
+alias gosimulador='gowallet && cd simulador.em.cash/'
+alias goib='cd ~ && cd programas/em-cash/wallet.em.cash/app.em.cash/'
+alias goparceiro='cd ~ && cd programas/em-cash/wallet.em.cash/parceiro.em.cash/'
+alias gocontrole='cd ~ && cd programas/em-cash/wallet.em.cash/controle.em.cash/'
+
+#SETUP
+alias soluto_setup='cd ~ && programas/pro_soluto_setup.sh'
 

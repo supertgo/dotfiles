@@ -7,12 +7,13 @@
 vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
 vim.opt.relativenumber = true
+vim.opt.modifiable = true
 
 -- general
 lvim.log.level = "info"
 lvim.format_on_save = {
   enabled = true,
-  pattern = "*.lua, *.c, *.cpp, *.py",
+  pattern = "*.lua, *go, *.c, *.cpp, *.py",
   timeout = 1000,
 }
 -- to disable icons and use a minimalist setup, uncomment the following
@@ -23,15 +24,15 @@ lvim.leader = "space"
 -- add your own keymapping
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 
--- lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
--- lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
+lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
+lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 
 -- -- Use which-key to add extra bindings with the leader-key prefix
 -- lvim.builtin.which_key.mappings["W"] = { "<cmd>noautocmd w<cr>", "Save without formatting" }
 -- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 
 -- -- Change theme settings
--- lvim.colorscheme = "lunar"
+lvim.colorscheme = "catppuccin-frappe"
 
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
@@ -45,7 +46,10 @@ lvim.builtin.treesitter.auto_install = true
 -- lvim.builtin.treesitter.ignore_install = { "haskell" }
 
 -- -- always installed on startup, useful for parsers without a strict filetype
-lvim.builtin.treesitter.ensure_installed = { "comment", "markdown_inline", "regex", "python"}
+lvim.builtin.treesitter.ensure_installed = { "typescript", "javascript", "comment", "markdown_inline", "regex", "python" }
+-- lvim.builtin.treesitter.ensure_installed = "maintained"
+-- lvim.builtin.treesitter.highlight.enabled = true
+-- lvim.builtin.treesitter.indent.enabled = true
 
 -- -- generic LSP settings <https://www.lunarvim.org/docs/languages#lsp-support>
 
@@ -82,17 +86,17 @@ formatters.setup {
   },
   {
     command = "prettier",
-    args = { "--print-width", "100" },
-    filetypes = { "typescript", "typescriptreact" },
+    args = { "--print-width", "80", "--single-quote" },
+    filetypes = { "typescript", "typescriptreact", "javascript" },
   },
 }
 
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
-  { command = "flake8", args= { "--ignore=E203"}, filetypes = { "python"}},
+  { command = "flake8", args = { "--ignore=E203" }, filetypes = { "python" } },
   {
     command = "codespell",
-    filetypes = { "javascript", "python" },
+    filetypes = { "typescript", "typescriptreact", "javascript", "python" },
   },
 }
 
@@ -103,20 +107,36 @@ code_actions.setup {
   },
 }
 
--- -- Additional Plugins <https://www.lunarvim.org/docs/plugins#user-plugins>
--- lvim.plugins = {
---     {
---       "folke/trouble.nvim",
---       cmd = "TroubleToggle",
---     },
--- }
+-- Additional Plugins <https://www.lunarvim.org/docs/plugins#user-plugins>
+lvim.plugins = {
+  {
+    "folke/trouble.nvim",
+    cmd = "TroubleToggle",
+  },
+  {
+    "tzachar/cmp-tabnine",
+    event = "BufRead",
+    build = "./install.sh",
+  },
+  {
+    "styled-components/vim-styled-components"
+  },
+  {
+    "catppuccin/nvim"
+  },
+  {
+    "folke/tokyonight.nvim",
+    lazy = false,
+    priorty = 1000,
+    opts = {},
+  },
+}
 
--- -- Autocommands (`:help autocmd`) <https://neovim.io/doc/user/autocmd.html>
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "zsh",
---   callback = function()
---     -- let treesitter use bash highlight for zsh files as well
---     require("nvim-treesitter.highlight").attach(0, "bash")
---   end,
--- })
-
+-- Autocommands (`:help autocmd`) <https://neovim.io/doc/user/autocmd.html>
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "zsh",
+  callback = function()
+    -- let treesitter use bash highlight for zsh files as well
+    require("nvim-treesitter.highlight").attach(0, "bash")
+  end,
+})
