@@ -8,6 +8,7 @@ vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
 vim.opt.relativenumber = true
 vim.opt.modifiable = true
+vim.opt.spelllang = "en_us"
 
 -- general
 lvim.log.level = "info"
@@ -16,7 +17,7 @@ lvim.format_on_save = {
   pattern = "*.lua, *go, *.c, *.cpp, *.py",
   timeout = 1000,
 }
--- to disable icons and use a minimalist setup, uncomment the following
+-- t: disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
 -- keymappings <https://www.lunarvim.org/docs/configuration/keybindings>
@@ -27,9 +28,14 @@ lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
 lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 
+
 -- -- Use which-key to add extra bindings with the leader-key prefix
--- lvim.builtin.which_key.mappings["W"] = { "<cmd>noautocmd w<cr>", "Save without formatting" }
--- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
+lvim.builtin.which_key.mappings["t"] = {
+  ["s"] = { "<cmd>TSToolsSortImports<CR>", "Sort Imports" },
+  ["r"] = { "<cmd>TSToolsRemoveUnusedImports<CR>", "Remove Unused Imports" },
+  ["a"] = { "<cmd>TSToolsAddMissingImports<CR>", "Add Missing Imports" },
+  ["f"] = { "<cmd>TSToolsFixAll<CR>", "Fix All Errors" },
+}
 
 -- -- Change theme settings
 lvim.colorscheme = "catppuccin-frappe"
@@ -77,6 +83,12 @@ lvim.lsp.installer.setup.automatic_installation = false
 --   --Enable completion triggered by <c-x><c-o>
 --   buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
 -- end
+--
+require 'nvim-treesitter.configs'.setup {
+  autotag = {
+    enable = true,
+  }
+}
 
 -- -- linters and formatters <https://www.lunarvim.org/docs/languages#lintingformatting>
 local formatters = require "lvim.lsp.null-ls.formatters"
@@ -98,6 +110,10 @@ linters.setup {
     command = "codespell",
     filetypes = { "typescript", "typescriptreact", "javascript", "python" },
   },
+  {
+    command = "misspell",
+    filetypes = { "typescript", "typescriptreact", "javascript", "python" },
+  }
 }
 
 local code_actions = require "lvim.lsp.null-ls.code_actions"
@@ -114,11 +130,6 @@ lvim.plugins = {
     cmd = "TroubleToggle",
   },
   {
-    "tzachar/cmp-tabnine",
-    event = "BufRead",
-    build = "./install.sh",
-  },
-  {
     "styled-components/vim-styled-components"
   },
   {
@@ -129,6 +140,24 @@ lvim.plugins = {
     lazy = false,
     priorty = 1000,
     opts = {},
+  },
+  {
+    "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    opts = {},
+  },
+  {
+    "ray-x/lsp_signature.nvim",
+    event = "VeryLazy",
+    opts = {},
+    config = function(_, opts) require 'lsp_signature'.setup(opts) end
+  },
+  { "ellisonleao/glow.nvim", config = true, cmd = "Glow" },
+  {
+    "wfxr/minimap.vim"
+  },
+  {
+    "norcalli/nvim-colorizer.lua"
   },
 }
 
