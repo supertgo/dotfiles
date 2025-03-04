@@ -1,0 +1,5 @@
+configuration {
+  modi: "run,window";                                                                                                                                                                          
+  show-icons: true;
+}
+@import "/usr/share/rofi/themes/Arc-Dark.rasi"
